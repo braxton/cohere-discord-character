@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "character-bot"
+version = "0.1.0"
+description = ""
+authors = [
+  "Alicja Mahr <braxton@mahr.cc>",
+  "Nick Frosst <nick@cohere.ai>"
+]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "character_bot"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+"discord.py" = "^2.0.0"
+cohere = "^2.5.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
