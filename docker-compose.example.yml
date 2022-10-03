@@ -1,0 +1,11 @@
+version: "3.7"
+services:
+  character-bot:
+    container_name: character-bot
+    image: braxton/character-bot:latest
+    restart: unless-stopped
+    environment:
+      - COHERE_API_KEY=
+      - DISCORD_GUILD_ID=
+      - DISCORD_BOT_TOKEN
+      - LOG_LEVEL=

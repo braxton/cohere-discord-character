@@ -4,7 +4,7 @@ import discord
 from discord.ext import commands
 
 from src.bot import Character_Bot
-from src.utils import embeds, cohere
+from src.utils import cohere
 
 log = logging.getLogger(__name__)
 

@@ -2,11 +2,11 @@ import asyncio
 import glob
 import logging
 import os
-
 import cohere
-
 import discord
 from discord.ext import commands
+
+import __init__
 
 
 class Character_Bot(commands.Bot):
@@ -16,7 +16,7 @@ class Character_Bot(commands.Bot):
         *args, 
         **kwargs
     ):
-        if cohere_api_key is "":
+        if cohere_api_key == "":
             raise Exception("Missing COHERE_API_KEY env var")
 
         self.cohere_client = cohere.Client(cohere_api_key)
@@ -41,12 +41,9 @@ log = logging.getLogger(__name__)
 
 @bot.event
 async def on_ready() -> None:
-    """
-    Called when the client is done preparing the data received from Discord.
-    """
     log.info(f"Logged in as: {str(bot.user)}")
 
-    if os.environ.get("DISCORD_GUILD_ID") is None:
+    if os.environ.get("DISCORD_GUILD_ID") == None:
         raise Exception("Missing DISCORD_GUILD_ID env var")
 
     await bot.tree.sync(guild=discord.Object(os.environ.get("DISCORD_GUILD_ID", "")))
@@ -55,7 +52,7 @@ async def main():
     for cog in glob.iglob(os.path.join("cogs", "**", "[!^_]*.py"), root_dir="src", recursive=True):
         await bot.load_extension(cog.replace("/", ".").replace("\\", ".").replace(".py", ""))
     
-    if os.environ.get("DISCORD_BOT_TOKEN") is None:
+    if os.environ.get("DISCORD_BOT_TOKEN") == None:
         raise Exception("Missing DISCORD_BOT_TOKEN env var")
     
     await bot.start(os.environ.get("DISCORD_BOT_TOKEN", ""))

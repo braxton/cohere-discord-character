@@ -14,6 +14,7 @@ packages = [{include = "character_bot"}]
 python = "^3.9"
 "discord.py" = "^2.0.0"
 cohere = "^2.5.0"
+coloredlogs = "^15.0.1"
 
 
 [build-system]
