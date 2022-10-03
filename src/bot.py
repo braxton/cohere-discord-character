@@ -2,11 +2,14 @@ import asyncio
 import glob
 import logging
 import os
+
 import cohere
+import dataset
 import discord
 from discord.ext import commands
 
 import __init__
+import utils.database as database
 
 
 class Character_Bot(commands.Bot):
@@ -48,6 +51,28 @@ async def on_ready() -> None:
 
     await bot.tree.sync(guild=discord.Object(os.environ.get("DISCORD_GUILD_ID", "")))
 
+@bot.event
+async def on_guild_join(guild: discord.Guild) -> None:
+    settings_db: dataset.Table | None = database.Database().get()["settings"]
+    assert settings_db is not None
+
+    pk = settings_db.insert(
+        dict(
+            guild_id=guild.id
+        )
+    )
+
+    log.info(f"Guild Joined: {pk} - {guild.id}")
+
+@bot.event
+async def on_guild_remove(guild: discord.Guild) -> None:
+    settings_db: dataset.Table | None = database.Database().get()["settings"]
+    assert settings_db is not None
+    
+    settings_db.delete(guild_id=guild.id)
+
+    log.info(f"Guild Left: {guild.id}")
+
 async def main():
     for cog in glob.iglob(os.path.join("cogs", "**", "[!^_]*.py"), root_dir="src", recursive=True):
         await bot.load_extension(cog.replace("/", ".").replace("\\", ".").replace(".py", ""))
@@ -58,4 +83,5 @@ async def main():
     await bot.start(os.environ.get("DISCORD_BOT_TOKEN", ""))
 
 if __name__ == "__main__":
+    database.Database().setup()
     asyncio.run(main())
