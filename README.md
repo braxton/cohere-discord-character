@@ -9,6 +9,7 @@ Uses the Cohere API to provide an interactive chatbot that can understand contex
     - `character-bot` Service
       - `COHERE_API_KEY`: Your key for the Cohere API
       - `DISCORD_GUILD_ID`: The guild ID for the server you'll be testing in
+      - `DISCORD_BOT_TOKEN`: The token for the Discord bot
       - `DB_PASSWORD`: The same password from the `mariadb` service's `MYSQL_PASSWORD` field
 
 
