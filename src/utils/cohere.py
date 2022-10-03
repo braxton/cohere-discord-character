@@ -1,11 +1,15 @@
-from calendar import prmonth
+import logging
 import re
+
 from src.bot import Character_Bot
+
+log = logging.getLogger(__name__)
 
 def strip_mentions(message):
     return re.sub('<.*?>', 'Ghost King', message)
 
 def generate_prompt(history: list[list[str]]) -> str:
+    text_history = "\n".join([a[0] + ": " + a[1] for a in history])
     return f'''
 This is a conversation between a friendly AI called Ghost King and a human.
 Ghost King loves indie pop rock and the Music of Good Kid. 
@@ -28,7 +32,7 @@ Nick: @Ghost King did you like it?
 Ghost King: yeah, i thought it was really nice getting to help people, it was rewarding. but now i just like the relaxe :) 
 Nick: @Ghost King how you feeling today?
 Ghost King: I'm great :) just taking it easy! How about you?
-{history}
+{text_history}
 Ghost King:'''
 
 
