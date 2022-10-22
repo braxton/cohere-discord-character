@@ -23,7 +23,7 @@ class AutoresponderListeners(commands.Cog):
         if message.author.bot or not message.guild:
             return
 
-        if self.bot.user.mention not in message.content: # type: ignore
+        if self.bot.user.mention not in message.content:  # type: ignore
             return
 
         db = database.Database().get()
@@ -32,13 +32,13 @@ class AutoresponderListeners(commands.Cog):
 
         guild_settings = settings_db.find_one(guild_id=message.guild.id)
         db.close()
+        log.info(guild_settings)
 
-        char_name = None
-        char_desc = None
+        char_name = "NPC"
+        char_desc = ''
         if guild_settings is not None:
             char_name = guild_settings["char_name"]
             char_desc = guild_settings["char_desc"]
-        
 
         history = []
         ctx = await self.bot.get_context(message)
@@ -46,7 +46,10 @@ class AutoresponderListeners(commands.Cog):
             async for msg in message.channel.history(limit=6):
                 if msg.content:
                     history = [[msg.author.name, cohere.strip_mentions(msg.clean_content, char_name)]] + history
-            await message.reply(cohere.generate_response(self.bot, history, char_name, char_desc))
+
+            log.info(f"replying")
+            response = cohere.generate_response(self.bot, history, char_name, char_desc)
+            await message.reply(response)
 
 
 async def setup(bot: Character_Bot) -> None:

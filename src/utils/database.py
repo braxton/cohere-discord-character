@@ -5,11 +5,11 @@ import dataset
 from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists, create_database
 
-
 log = logging.getLogger(__name__)
 
 
 class Database:
+
     def __init__(self) -> None:
         host = os.environ.get("DB_HOST")
         database = os.environ.get("DB_DATABASE")

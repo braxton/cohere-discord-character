@@ -13,11 +13,11 @@ from discord.ext import commands
 
 from src.bot import Character_Bot
 
-
 log = logging.getLogger(__name__)
 
 
 class DeveloperCommands(commands.Cog):
+
     def __init__(self, bot: Character_Bot) -> None:
         self.bot = bot
         self._last_result = None
@@ -36,10 +36,7 @@ class DeveloperCommands(commands.Cog):
     @app_commands.command(name="eval", description="Evaluates Python code from previous message")
     @app_commands.guilds(discord.Object(os.environ.get("DISCORD_GUILD_ID", "DISCORD_GUILD_ID_MISSING")))
     @app_commands.guild_only()
-    async def eval(
-        self,
-        ctx: discord.Interaction
-    ):
+    async def eval(self, ctx: discord.Interaction):
         """
         Evaluates input as Python code.
         """
@@ -47,16 +44,10 @@ class DeveloperCommands(commands.Cog):
         await ctx.response.defer(thinking=True, ephemeral=True)
 
         if not await self.bot.is_owner(ctx.user):
-            return await ctx.followup.send(
-                "ERR: You are not the owner of this bot",
-                ephemeral=True
-            )
+            return await ctx.followup.send("ERR: You are not the owner of this bot", ephemeral=True)
 
         if not ctx.channel or not isinstance(ctx.channel, TextChannel):
-            return await ctx.followup.send(
-                "ERR: Unable to define channel",
-                ephemeral=True
-            )
+            return await ctx.followup.send("ERR: Unable to define channel", ephemeral=True)
 
         # Required environment variables.
         env = {
@@ -70,15 +61,12 @@ class DeveloperCommands(commands.Cog):
         }
 
         msgs = [
-            x async for x in ctx.channel.history(limit=10) 
-            if x.author.id == ctx.user.id and x.content.startswith("```") and x.content.endswith("```")
+            x async for x in ctx.channel.history(
+                limit=10) if x.author.id == ctx.user.id and x.content.startswith("```") and x.content.endswith("```")
         ]
         if len(msgs) == 0:
-            return await ctx.followup.send(
-                "Unable to find code to execute",
-                ephemeral= True
-            )
-        
+            return await ctx.followup.send("Unable to find code to execute", ephemeral=True)
+
         msg = msgs[0]
 
         body = msg.content
@@ -138,6 +126,7 @@ class DeveloperCommands(commands.Cog):
                 output = f"```py\n{value}{ret}\n```"
                 embed.add_field(name="Output:", value=output, inline=False)
                 await ctx.followup.send(embed=embed)
+
 
 async def setup(bot: Character_Bot) -> None:
     await bot.add_cog(DeveloperCommands(bot))
