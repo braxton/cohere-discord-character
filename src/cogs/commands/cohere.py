@@ -1,13 +1,14 @@
-import os
 import logging
-import dataset
+import os
+from io import BytesIO
 
+import dataset
 import discord
 from discord import app_commands
 from discord.ext import commands
 
-from src.bot import Character_Bot
 import utils.database as database
+from src.bot import Character_Bot
 from src.utils import cohere
 
 log = logging.getLogger(__name__)
@@ -67,19 +68,24 @@ class CohereCommands(commands.Cog):
         db = database.Database().get()
         settings_db: dataset.Table | None = db["settings"]
         assert settings_db is not None
-        guild_settings = settings_db.find_one(guild_id=ctx.guild.id)
+
+        guild_settings = settings_db.find_one(guild_id=ctx.guild_id)
         db.close()
+
         char_name = None
         char_desc = None
         if guild_settings is not None:
             char_name = guild_settings["char_name"]
             char_desc = guild_settings["char_desc"]
 
-        img = cohere.profile_picutre(self.bot, char_name, char_desc)
-        file_name = char_name + ".png"
-        img.save(file_name)
-        await ctx.followup.send('', file=discord.File(file_name))
-        os.remove(file_name)
+        img = cohere.profile_picture(self.bot, char_name, char_desc)
+
+        with BytesIO() as image_binary:
+            img.save(image_binary, 'PNG')
+            image_binary.seek(0)
+            await ctx.followup.send('', file=discord.File(fp = image_binary, filename = 'profile.png'))
+
+        
 
 
 async def setup(bot: Character_Bot) -> None:

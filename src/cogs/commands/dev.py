@@ -1,14 +1,13 @@
 import io
-import os
 import logging
+import os
 import textwrap
 import traceback
 from contextlib import redirect_stdout
 from typing import Text
 
 import discord
-from discord import app_commands
-from discord import TextChannel
+from discord import TextChannel, app_commands
 from discord.ext import commands
 
 from src.bot import Character_Bot

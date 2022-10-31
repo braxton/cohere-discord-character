@@ -1,10 +1,11 @@
+import base64
+import io
 import logging
 import re
 from typing import Optional
+
 import requests
-import base64
 from PIL import Image
-import io
 
 from src.bot import Character_Bot
 
@@ -177,7 +178,7 @@ def generate_response(bot: Character_Bot,
     return text
 
 
-def profile_picutre(bot: Character_Bot, name: Optional[str] = "NPC", desc: Optional[str] = "A friendly Robot") -> str:
+def profile_picture(bot: Character_Bot, name: Optional[str] = "NPC", desc: Optional[str] = "A friendly Robot") -> Image.Image:
     host = 'http://34.160.6.154/txt2img'
     prompt = f"Cartoon Profile Picture, {name}, {desc}, Cartoon Profile Picture"
     response = requests.post(

@@ -3,7 +3,7 @@ import os
 
 import dataset
 from sqlalchemy import create_engine
-from sqlalchemy_utils import database_exists, create_database
+from sqlalchemy_utils import create_database, database_exists
 
 log = logging.getLogger(__name__)
 

@@ -1,6 +1,6 @@
 import logging
-import dataset
 
+import dataset
 import discord
 from discord.ext import commands
 
