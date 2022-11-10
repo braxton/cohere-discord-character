@@ -46,7 +46,10 @@ async def on_ready() -> None:
     if os.environ.get("DISCORD_GUILD_ID") == None:
         raise Exception("Missing DISCORD_GUILD_ID env var")
 
+    # Sync dev guild commands
     await bot.tree.sync(guild=discord.Object(os.environ.get("DISCORD_GUILD_ID", "")))
+    # Sync global commands
+    await bot.tree.sync(guild=None)
 
 
 @bot.event
