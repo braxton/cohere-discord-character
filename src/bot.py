@@ -83,6 +83,7 @@ async def main():
     # Load commands
     await bot.load_extension("cogs.commands.general")
     await bot.load_extension("cogs.commands.dev")
+    await bot.load_extension("cogs.commands.cohere")
     # Load events/listeners
     await bot.load_extension("cogs.listeners.autoresponder")
 
