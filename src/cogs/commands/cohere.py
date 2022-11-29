@@ -35,13 +35,17 @@ class CharacterModal(discord.ui.Modal, title='Cohere Character Config'):
         db.commit()
         db.close()
 
+        if ctx.guild is not None:
+            await ctx.guild.me.edit(
+                nick=str(self.char_name) if self.char_name != "" else None
+            )
+
         await ctx.response.send_message(
             f'NPC status: Character config updated!\n\nName: `{self.char_name}`\nDescription: `{self.char_desc}`')
 
     async def on_error(self, interaction: discord.Interaction, error: Exception) -> None:
         await interaction.response.send_message('Oops! Something went wrong.', ephemeral=True)
         log.error(f'Error in modal: {error.__traceback__}')
-
 
 class CohereCommands(commands.Cog):
 

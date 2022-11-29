@@ -80,8 +80,14 @@ async def on_guild_remove(guild: discord.Guild) -> None:
 
 
 async def main():
-    for cog in glob.iglob(os.path.join("cogs", "**", "[!^_]*.py"), root_dir="src", recursive=True):
-        await bot.load_extension(cog.replace("/", ".").replace("\\", ".").replace(".py", ""))
+    # Load commands
+    await bot.load_extension("cogs.commands.general")
+    await bot.load_extension("cogs.commands.dev")
+    # Load events/listeners
+    await bot.load_extension("cogs.listeners.autoresponder")
+
+    #for cog in glob.iglob(os.path.join("cogs", "**", "[!^_]*.py"), root_dir="src", recursive=True):
+    #    await bot.load_extension(cog.replace("/", ".").replace("\\", ".").replace(".py", ""))
 
     if os.environ.get("DISCORD_BOT_TOKEN") == None:
         raise Exception("Missing DISCORD_BOT_TOKEN env var")
